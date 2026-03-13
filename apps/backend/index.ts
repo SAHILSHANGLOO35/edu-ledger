@@ -97,4 +97,6 @@ app.get("/calendar/:courseId", authMiddleware, async (req, res) => {
   });
 });
 
-app.listen(8000);
+app.listen(process.env.PORT || 8080, () => {
+  console.log(`SERVER STARTED ON PORT: ${process.env.PORT}`);
+});
