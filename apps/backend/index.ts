@@ -47,6 +47,7 @@ app.post("/signin", async (req, res) => {
     const token = jwt.sign(
       {
         userId: user.id,
+        email: user.email,
       },
       process.env.JWT_SECRET!,
     );
@@ -94,6 +95,27 @@ app.get("/calendar/:courseId", authMiddleware, async (req, res) => {
   return res.status(200).json({
     id: course.id,
     calendarNotionId: course.calendarNotionId,
+  });
+});
+
+app.get("/courses", authMiddleware, async (req, res) => {
+  const courses = await prisma.course.findMany({
+    where: {
+      purchases: {
+        some: {
+          userId: req.userId,
+        },
+      },
+    },
+  });
+
+  return res.status(200).json({
+    courses: courses.map((c) => ({
+      id: c.id,
+      title: c.title,
+      slugf: c.slug,
+      calendarNotionId: c.calendarNotionId,
+    })),
   });
 });
 
