@@ -1,20 +1,32 @@
-import { Geist, Manrope } from "next/font/google"
-
+import type { Metadata, Viewport } from "next"
+import { Inter, Geist_Mono } from "next/font/google"
+// import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { AuthProvider } from "@/lib/auth-context"
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
 })
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  variable: "--font-geist-mono",
 })
+
+export const metadata: Metadata = {
+  title: "EduLedger - Your Learning Universe",
+  description:
+    "Navigate your educational journey through the cosmos of knowledge",
+  generator: "v0.app",
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0f0f17",
+  width: "device-width",
+  initialScale: 1,
+}
 
 export default function RootLayout({
   children,
@@ -22,19 +34,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn(
-        "antialiased",
-        "font-geist",
-        geist.variable,
-        "font-manrope",
-        manrope.variable
-      )}
-    >
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.variable} ${geistMono.variable} font-sans antialiased`}
+      >
+        <AuthProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </AuthProvider>
+        {/* <Analytics /> */}
       </body>
     </html>
   )

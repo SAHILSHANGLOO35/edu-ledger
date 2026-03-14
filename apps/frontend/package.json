@@ -12,8 +12,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@vercel/analytics": "^2.0.1",
+    "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
