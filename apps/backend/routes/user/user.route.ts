@@ -163,7 +163,7 @@ router.post("/send", authMiddleware, async (req, res) => {
         const response = await axios.post(`${server}/send/step-1`, {
           to: data.to,
           amount: data.amount,
-          userId: req.userId,
+          userId: user.id,
           recentBlockhash: blockhash,
         });
         return response.data;
@@ -175,7 +175,7 @@ router.post("/send", authMiddleware, async (req, res) => {
         const response = await axios.post(`${server}/send/step-2`, {
           to: data.to,
           amount: data.amount,
-          userId: req.userId,
+          userId: user.id,
           recentBlockhash: blockhash,
           step1Responses: step1Responses[index],
           allPublicNonces: step1Responses.map((r) => r.response.publicNonce),

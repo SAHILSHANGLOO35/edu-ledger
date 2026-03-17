@@ -23,7 +23,7 @@ app.post("/create-user", async (req, res) => {
     });
 
     return res.status(200).json({
-      publicKeys: participant.publicKey,
+      publicKey: participant.publicKey,
     });
   } catch (error) {
     console.error(error);

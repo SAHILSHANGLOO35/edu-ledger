@@ -74,6 +74,7 @@ router.post("/create-user", adminAuthuthMiddleware, async (req, res) => {
       });
     }
 
+    // Create user
     const user = await prisma.user.create({
       data: {
         email: data.email,
@@ -83,6 +84,7 @@ router.post("/create-user", adminAuthuthMiddleware, async (req, res) => {
       },
     });
 
+    // Send request to MPC Servers for creating public and secret key for this user
     const responses = await Promise.all(
       MPC_SERVERS.map(async (server) => {
         const response = await axios.post(`${server}/create-user`, {
@@ -92,11 +94,13 @@ router.post("/create-user", adminAuthuthMiddleware, async (req, res) => {
       }),
     );
 
+    // Combine the public keys -> Actual solana wallet address
     const aggregatedPublicKeys = cli.aggregateKeys(
       responses.map((r) => r.publicKey),
       MPC_THRESHOLD,
     );
 
+    // Updating user table with aggregated public key
     await prisma.user.update({
       where: {
         id: user.id,
@@ -106,6 +110,7 @@ router.post("/create-user", adminAuthuthMiddleware, async (req, res) => {
       },
     });
 
+    // Airdropping SOL to this created user
     await cli.airdrop(aggregatedPublicKeys.aggregatedPublicKey, 0.1);
 
     return res.json({
