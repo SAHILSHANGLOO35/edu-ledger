@@ -166,7 +166,7 @@ router.post("/send", authMiddleware, async (req, res) => {
           userId: user.id,
           recentBlockhash: blockhash,
         });
-        return response.data;
+        return response.data.response;
       }),
     );
 
@@ -178,7 +178,7 @@ router.post("/send", authMiddleware, async (req, res) => {
           userId: user.id,
           recentBlockhash: blockhash,
           step1Responses: step1Responses[index],
-          allPublicNonces: step1Responses.map((r) => r.response.publicNonce),
+          allPublicNonces: step1Responses.map((r) => r.publicNonce),
         });
         return response.data;
       }),
