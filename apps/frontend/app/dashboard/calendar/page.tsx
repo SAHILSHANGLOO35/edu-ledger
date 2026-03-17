@@ -2,11 +2,23 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar as CalendarIcon, ExternalLink, RefreshCw, AlertCircle } from "lucide-react"
+import {
+  Calendar as CalendarIcon,
+  ExternalLink,
+  RefreshCw,
+  AlertCircle,
+} from "lucide-react"
+import { useCourse } from "@/hooks/use-course"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 interface CalendarData {
   id: string
@@ -14,7 +26,8 @@ interface CalendarData {
 }
 
 export default function CalendarPage() {
-  const { selectedCourse, token } = useAuth()
+  const { token } = useAuth()
+  const { selectedCourse } = useCourse()
   const [calendarData, setCalendarData] = useState<CalendarData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -27,11 +40,14 @@ export default function CalendarPage() {
       setError(null)
 
       try {
-        const response = await fetch(`${API_URL}/calendar/${selectedCourse.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        const response = await fetch(
+          `${API_URL}/calendar/${selectedCourse.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
 
         if (!response.ok) {
           const data = await response.json()
@@ -63,8 +79,7 @@ export default function CalendarPage() {
           <p className="mt-1 text-muted-foreground">
             {selectedCourse
               ? `Schedule for ${selectedCourse.title}`
-              : "Select a course to view its calendar"
-            }
+              : "Select a course to view its calendar"}
           </p>
         </div>
         {notionEmbedUrl && (
@@ -95,7 +110,9 @@ export default function CalendarPage() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <CalendarIcon className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-foreground">No Course Selected</h3>
+            <h3 className="mt-4 text-lg font-semibold text-foreground">
+              No Course Selected
+            </h3>
             <p className="mt-2 text-center text-muted-foreground">
               Please select a course from the sidebar to view its calendar
             </p>
@@ -114,7 +131,9 @@ export default function CalendarPage() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/20">
               <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-foreground">Unable to Load Calendar</h3>
+            <h3 className="mt-4 text-lg font-semibold text-foreground">
+              Unable to Load Calendar
+            </h3>
             <p className="mt-2 text-center text-muted-foreground">{error}</p>
             <Button
               variant="outline"
@@ -153,7 +172,9 @@ export default function CalendarPage() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <CalendarIcon className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-foreground">No Calendar Available</h3>
+            <h3 className="mt-4 text-lg font-semibold text-foreground">
+              No Calendar Available
+            </h3>
             <p className="mt-2 text-center text-muted-foreground">
               This course does not have a calendar configured yet
             </p>
@@ -162,11 +183,13 @@ export default function CalendarPage() {
       )}
 
       {/* Upcoming Events Preview */}
-      {selectedCourse && !error && (
+      {/* {selectedCourse && !error && (
         <Card className="border-border bg-card/50 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-foreground">Upcoming Events</CardTitle>
-            <CardDescription>Next events for {selectedCourse.title}</CardDescription>
+            <CardDescription>
+              Next events for {selectedCourse.title}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -197,11 +220,12 @@ export default function CalendarPage() {
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
     </div>
   )
 }
 
+/*
 function EventItem({
   title,
   date,
@@ -230,16 +254,23 @@ function EventItem({
   return (
     <div className="flex items-center gap-4 rounded-lg border border-border bg-secondary/30 p-4 transition-colors hover:bg-secondary/50">
       <div className="flex h-12 w-12 flex-col items-center justify-center rounded-lg bg-secondary">
-        <span className="text-xs text-muted-foreground">{date.split(",")[0].split(" ")[0]}</span>
-        <span className="text-lg font-bold text-foreground">{date.split(",")[0].split(" ")[1]}</span>
+        <span className="text-xs text-muted-foreground">
+          {date.split(",")[0].split(" ")[0]}
+        </span>
+        <span className="text-lg font-bold text-foreground">
+          {date.split(",")[0].split(" ")[1]}
+        </span>
       </div>
       <div className="flex-1">
         <p className="font-medium text-foreground">{title}</p>
         <p className="text-sm text-muted-foreground">{time}</p>
       </div>
-      <span className={`rounded-full px-3 py-1 text-xs font-medium ${typeStyles[type]}`}>
+      <span
+        className={`rounded-full px-3 py-1 text-xs font-medium ${typeStyles[type]}`}
+      >
         {typeLabels[type]}
       </span>
     </div>
   )
 }
+*/
