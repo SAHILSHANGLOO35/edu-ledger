@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./inputs": "./inputs.ts"
+    "./inputs": "./inputs.ts",
+    "./solana": "./solana.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
